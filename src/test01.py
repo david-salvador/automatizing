@@ -3,7 +3,11 @@
 # \automatizing\src> python test01.py > food_directory.txt
 # \automatizing\src> python test01.py >> food_directory.txt     appends
 # clear; python test01.py :-) clears the console
+
 import os
+import sys
+
+sys.path.append("/foo_load_path") # This will add the foo directory to the list of paths to look for modules in as well.
 
 print("start **********************************************")
 
@@ -176,10 +180,91 @@ def do_dictionaries():
     for name, number in phonebook.items():
         print("Phone number of %s is %d" % (name, number))
 
-# do_string()
-# do_conditions()
-# do_loops()
-# do_classes()
-do_dictionaries()
+def do_module():
+    visual_mode = True
+    if visual_mode:
+        # in visual mode, we draw using graphics
+        import module01 as helper
+    else:
+        # in textual mode, we print out text
+        import module02 as helper
+
+    result = helper.calculate_result()
+
+    from module02 import draw_game
+    draw_game(result)
+
+
+    # import mi_package_01.module01 as xxx
+    from mi_package_01 import p01module01
+    p01module01.do_x()
+
+def do_module2():
+
+    import re
+
+    # Your code goes here
+    find_members = []
+    for member in dir(re):
+        if "find" in member:
+            find_members.append(member)
+
+    print(sorted(find_members))
+
+def do_regexp():
+    import re
+    pattern = re.compile(r"\[(on|off)\]") # Slight optimization
+    print(re.search(pattern, "Mono: Playback 65 [75%] [-16.50dB] [on]"))
+    # Returns a Match object!
+    print(re.search(pattern, "Nada...:-("))
+    # Doesn't return anything.
+    # End Example
+
+def do_file_manipulation_copy():
+    import shutil
+    source = '../test_cases/karma.conf.test_subject_01.js'
+    # destination = '../dev_folder'
+    destination = '../dev_folder/karma.conf.test_subject_01.backup.js'
+    # shutil.move('../test_cases/test_subject_01.json', '../dev_folder')
+    new_path = shutil.copy(source, destination )
+    print('copied: %s to --> %s' %(source, new_path))
+
+def do_file_manipulation_lineReplace():
+    import fileinput
+    import re
+
+    pattern = re.compile(r"^(.*)ChromeHeadless(.*)$")
+    filename = '../test_cases/karma.conf.test_subject_01.js'
+
+    for line in fileinput.input([filename], inplace=True):
+        # if line.strip().startswith('initial_mass = '):
+        match = re.match(pattern, line)
+        if match:
+            line = match.group(1) + 'Chrome' + match.group(2) + '\n'
+        sys.stdout.write(line)
+
+
+
+
+def main():
+    # do_string()
+    # do_conditions()
+    # do_loops()
+    # do_classes()
+    # do_dictionaries()
+    # do_module()
+    # do_module2()
+    # do_regexp()
+    # do_file_manipulation_copy()
+    do_file_manipulation_lineReplace()
+
+
+
+
 
 print("end ************************************************")
+
+# this means that if this script is executed, then
+# main() will be executed
+if __name__ == '__main__':
+    main()
